@@ -21,6 +21,7 @@ A robust shell script for safely and efficiently deploying Nginx configuration f
 -   Nginx 서버가 설치되어 있어야 합니다.
 -   `rsync` 유틸리티가 설치되어 있어야 합니다.
 -   `systemd` 기반 시스템 (Ubuntu, CentOS 등)
+-    **Nginx 설정 파일이 시스템 경로(`/etc/nginx`)가 아닌 별도의 Git 저장소에서 관리되고 있다는 가정하에 스크립트가 작동합니다.**
 
 ## 📦 설치 및 설정
 
