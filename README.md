@@ -64,6 +64,7 @@ sudo [YOUR_NGINX_CONFIG_REPO_PATH]/deploy_nginx_config.sh
 -   **`--delete` 옵션**: 스크립트 내 `rsync` 명령에는 `--delete` 옵션이 포함되어 있습니다. 이는 대상 경로(`/etc/nginx`)에는 있지만 Git 저장소에는 없는 파일이나 디렉토리를 **삭제**합니다. `/etc/nginx` 디렉토리에는 Git 저장소에서 관리하지 않는 중요한 파일이 없는지 **반드시 확인**하십시오.
 -   **`sudo` 권한**: Nginx 설정은 시스템 영역이므로 스크립트는 반드시 `sudo` 권한으로 실행해야 합니다.
 -   **Let's Encrypt 경로**: 스크립트는 Let's Encrypt 인증서 경로를 `/etc/letsencrypt/live/` 및 `/etc/letsencrypt/archive/`로 가정합니다. 다른 경로를 사용한다면 스크립트 내 변수(`LE_LIVE_PATH`, `LE_ARCHIVE_PATH`)를 수정해야 합니다.
+-   **실행하기전에 backup_etc_nginx.sh로 백업을 진행하고 하세요.
 
 ## 📄 라이선스
 
