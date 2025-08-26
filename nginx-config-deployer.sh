@@ -33,12 +33,30 @@ echo "🚀 STEP 1: Nginx 설정 파일을 동기화합니다..."
 echo "   - 원본: ${CONFIG_SOURCE_PATH}"
 echo "   - 대상: ${NGINX_TARGET_PATH}"
 
-rsync -av --delete --exclude='.git/' --exclude='.gitignore' --exclude='deploy*.sh' --exclude='backups/' "${CONFIG_SOURCE_PATH}" "${NGINX_TARGET_PATH}"
+rsync -av --delete --exclude='.git/' --exclude='.gitignore' --exclude='deploy*.sh' --exclude='backups/' --exclude='sites-enabled/' "${CONFIG_SOURCE_PATH}" "${NGINX_TARGET_PATH}"
 
 if [ $? -ne 0 ]; then
     echo "❌ 동기화(rsync) 실패. 배포를 중단합니다."
     exit 1
 fi
+
+# ==============================================================================
+# STEP 1.5: sites-enabled 심볼릭 링크 재설정
+# ==============================================================================
+echo "🔗 STEP 1.5: sites-enabled 심볼릭 링크를 재설정합니다..."
+
+# 기존 sites-enabled 링크를 모두 제거
+find "${NGINX_TARGET_PATH}sites-enabled" -type l -delete
+
+# sites-available의 모든 .conf 파일 중 유효한 파일에 대해 심볼릭 링크 생성
+for conf_file in "${NGINX_TARGET_PATH}sites-available"/*.conf; do
+    filename=$(basename "$conf_file")
+    # 파일이 실제로 존재하는 경우에만 링크 생성
+    if [ -f "$conf_file" ]; then
+        echo "   - 링크 생성: ${filename}"
+        ln -sf "${conf_file}" "${NGINX_TARGET_PATH}sites-enabled/${filename}"
+    fi
+done
 
 # ==============================================================================
 # STEP 2: 파일 소유권 및 권한 재설정 (가장 중요!)
